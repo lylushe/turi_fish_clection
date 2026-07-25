@@ -1,1 +1,653 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>フィッシュ釣りコレクト</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="deepBackground"></div>
 
+    <div id="bubbleBackground"></div>
+    <div id="partnerFishLayer" aria-hidden="true">
+    <img id="partnerFishImage" src="" alt="">
+</div>
+
+
+    <div id="game">
+    <header id="topBar">
+        <div class="status">
+            <div class="levelRow">
+                <span id="levelText">Lv.1</span>
+                <span id="expText">0 / 40</span>
+            </div>
+
+            <div id="expBar">
+                <div id="exp"></div>
+                <div id="expPopupArea"></div>
+            </div>
+        </div>
+
+        <div class="moneySettingsArea">
+
+    <div class="moneyDisplay">
+        💰 <span id="money">0</span> G
+    </div>
+
+    <button
+        id="openSettings"
+        class="topSettingsButton"
+        type="button"
+        aria-label="設定を開く"
+    >
+        ⚙️
+    </button>
+
+</div>
+    </header>
+
+
+
+    <main id="content">
+        <section id="homeScreen" class="screen active">
+            <button class="fishButton" id="single">🎣<br>無料で釣る</button>
+
+        </section>
+
+        <section id="gachaScreen" class="screen">
+            <h1>Tap!</h1>
+            <button id="box" aria-label="釣果を確認する">🎣</button>
+        </section>
+
+        <section id="resultScreen" class="screen">
+            <p id="resultMessage"></p>
+            <div id="resultFish"></div>
+            <div id="resultActions">
+                <button id="keepFish">保管</button>
+            </div>
+        </section>
+
+        <section id="storageScreen" class="screen panelScreen">
+            <div class="panelHeader">
+                <h1>保管所</h1>
+                <span id="storageCount">0 / 5匹</span>
+            </div>
+            <div id="storageList"></div>
+            <button class="backButton" data-back-home>ホームへ戻る</button>
+        </section>
+
+        <div id="trophyDisplayLayer" aria-hidden="true">
+    <div id="equippedTrophyVisual"></div>
+</div>
+
+<section id="encyclopediaScreen" class="screen panelScreen">
+
+    <div class="panelHeader encyclopediaHeader">
+        <h1>図鑑</h1>
+
+        <span id="encyclopediaTotalCount">
+            発見数 0 / 0
+        </span>
+    </div>
+
+    <div id="encyclopediaList"></div>
+
+    <button class="backButton" data-back-home>
+        ホームへ戻る
+    </button>
+
+</section>
+
+<section id="storeScreen" class="screen panelScreen">
+
+    <div class="panelHeader">
+        <h1>ストア</h1>
+    </div>
+
+    <p
+        id="storeMessage"
+        class="storeMessage"
+        aria-live="polite"
+    ></p>
+
+    <!-- アイテムコーナー -->
+    <section class="storeSection">
+        <div class="storeSectionHeader">
+            <div>
+                <h2>アイテムコーナー</h2>
+                <p>釣りを有利にする消耗品です</p>
+            </div>
+        </div>
+
+        <div class="storeGrid">
+
+            <article class="storeCard">
+                <div class="storeItemBody">
+                    <h3>撒き餌</h3>
+
+                    <p class="storeItemDescription">
+                        次の通常釣り1回だけ、珍しい魚が
+                        出やすくなります。
+                    </p>
+
+                    <p class="storeOwnedText">
+                        所持数：
+                        <strong id="baitCountText">0個</strong>
+                    </p>
+
+                    <p class="storeEffectText">
+                        レア以上の確率が上昇
+                    </p>
+
+                    <div id="baitPriceText" class="storePrice"></div>
+
+                    <div class="storeCardActions">
+                        <button
+                            id="buyBaitButton"
+                            class="storeBuyButton"
+                            type="button"
+                        >
+                            1個購入（長押し可）
+                        </button>
+
+                        <button
+                            id="toggleBaitButton"
+                            class="storeEquipButton"
+                            type="button"
+                        >
+                            使用する
+                        </button>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+
+    <!-- オートマ採掘 -->
+    <div class="storeGrid autoMiningStoreGrid">
+        <article class="storeCard autoMiningStoreCard">
+            <div class="storeItemBody">
+                <h3>オートマ採掘</h3>
+
+                <p class="storeItemDescription">
+                    釣り上げるたびに、段階に応じた
+                    お金を自動で獲得します。
+                </p>
+
+                <p class="storeOwnedText">
+                    現在：
+                    <strong id="autoMiningLevelText">未購入</strong>
+                </p>
+
+                <p
+                    id="autoMiningEffectText"
+                    class="storeEffectText"
+                >
+                    効果：なし
+                </p>
+
+                <div
+                    id="autoMiningPriceText"
+                    class="storePrice"
+                ></div>
+
+                <div class="storeCardActions">
+                    <button
+                        id="buyAutoMiningButton"
+                        class="storeBuyButton"
+                        type="button"
+                    >
+                        購入する
+                    </button>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <div class="storeGrid storeUtilityGrid">
+        <article class="storeCard">
+            <div class="storeItemBody">
+                <h3>保管所拡張</h3>
+
+                <p class="storeItemDescription">
+                    購入すると保管所の上限が
+                    永久に1匹増えます。
+                </p>
+
+                <p class="storeEffectText">
+                    現在の上限：
+                    <strong id="storageLimitStoreText">5匹</strong>
+                </p>
+
+                <div id="storageExpansionPriceText" class="storePrice"></div>
+
+                <div class="storeCardActions">
+                    <button
+                        id="buyStorageExpansionButton"
+                        class="storeBuyButton"
+                        type="button"
+                    >
+                        購入する
+                    </button>
+                </div>
+            </div>
+        </article>
+
+        <article class="storeCard superEggStoreCard">
+            <div class="storeItemBody">
+
+                <h3>スーパー魚卵</h3>
+
+                <p class="storeItemDescription">
+                    通常の魚卵よりも、珍しい魚が
+                    出やすい特別な魚卵です。
+                </p>
+
+                <p class="storeEffectText">
+                    購入すると保管所へ直接入ります。
+                </p>
+
+                <div id="superEggPriceText" class="storePrice"></div>
+
+                <div class="storeCardActions">
+                    <button
+                        id="buySuperEggButton"
+                        class="storeBuyButton"
+                        type="button"
+                    >
+                        購入する
+                    </button>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <!-- コレクションコーナー -->
+    <section class="storeSection">
+        <div class="storeSectionHeader">
+            <div>
+                <h2>コレクションコーナー</h2>
+                <p>
+                    購入したトロフィーを1つだけ
+                    ゲーム画面に飾れます
+                </p>
+            </div>
+        </div>
+
+        <div
+            id="trophyStoreList"
+            class="storeGrid"
+        ></div>
+    </section>
+
+    <button
+        class="backButton"
+        data-back-home
+    >
+        ホームへ戻る
+    </button>
+
+</section>
+
+<section
+    id="casinoScreen"
+    class="screen panelScreen"
+>
+    <div class="panelHeader">
+        <h1>カジノ</h1>
+    </div>
+
+    <p class="casinoNotice">
+        ゲーム内コインを使って遊べます
+    </p>
+
+    <div class="casinoGameGrid">
+
+        <button
+            id="openCrashGame"
+            class="casinoGameCard"
+            type="button"
+        >
+            <span class="casinoGameIcon">
+                📈
+            </span>
+
+            <span class="casinoGameName">
+                クラッシュ
+            </span>
+
+            <span class="casinoGameDescription">
+                倍率がクラッシュする前に
+                キャッシュアウトしよう
+            </span>
+
+            <span class="casinoPlayableLabel">
+                プレイ可能
+            </span>
+        </button>
+
+        <div class="casinoGameCard unavailable">
+            <span class="casinoGameIcon">
+                🎲
+            </span>
+
+            <span class="casinoGameName">
+                Coming Soon
+            </span>
+
+            <span class="casinoGameDescription">
+                新しいゲームを追加予定
+            </span>
+
+            <span class="casinoUnavailableLabel">
+                準備中
+            </span>
+        </div>
+
+    </div>
+
+    <button
+        class="backButton"
+        data-back-home
+        type="button"
+    >
+        ホームへ戻る
+    </button>
+</section>
+
+<section
+    id="crashScreen"
+    class="screen panelScreen"
+>
+
+    <div class="crashGamePanel">
+
+        <div class="crashGraphArea">
+            <canvas
+                id="crashGraphCanvas"
+                aria-hidden="true"
+            ></canvas>
+
+            <div
+                id="crashMultiplier"
+                class="crashMultiplier"
+            >
+                1.00x
+            </div>
+        </div>
+
+        <p
+            id="crashMessage"
+            class="crashMessage"
+            aria-live="polite"
+        >
+            掛け金を入力してください
+        </p>
+
+        <div class="crashControlRow">
+            <div class="crashBetInputArea">
+                <input
+                    id="crashBetInput"
+                    type="number"
+                    min="100"
+                    step="100"
+                    value="100"
+                    inputmode="numeric"
+                    aria-label="掛け金"
+                >
+
+                <span>G</span>
+            </div>
+
+            <button
+                id="startCrashButton"
+                class="startCrashButton"
+                type="button"
+            >
+                ゲーム開始
+            </button>
+        </div>
+
+    </div>
+
+    <button
+        id="backToCasino"
+        class="backButton"
+        type="button"
+    >
+        カジノへ戻る
+    </button>
+</section>
+
+        <section id="settingsScreen" class="screen panelScreen">
+            <h1>設定</h1>
+
+            <div class="volumeSetting">
+                <div class="volumeHeader">
+                    <span class="volumeIcon">🔊</span>
+                    <span class="volumeLabel">SE音量</span>
+                    <span id="volumeValue">40%</span>
+                </div>
+
+                <input
+                    id="volumeSlider"
+                    class="volumeSlider"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="40"
+                    aria-label="効果音の音量"
+                >
+            </div>
+
+            <div class="volumeSetting">
+    <div class="volumeHeader">
+        <span class="volumeIcon">🎵</span>
+        <span class="volumeLabel">BGM音量</span>
+        <span id="bgmVolumeValue">50%</span>
+    </div>
+
+    <input
+        id="bgmVolumeSlider"
+        class="volumeSlider"
+        type="range"
+        min="0"
+        max="100"
+        value="50"
+        aria-label="BGMの音量"
+    >
+
+</div>
+
+<button
+    id="openAchievements"
+    class="achievementMenuButton"
+    type="button"
+>
+    <span class="achievementMenuIcon">
+        🏅
+    </span>
+
+    <span class="achievementMenuText">
+        <strong>実績一覧</strong>
+
+        <small id="achievementProgressText">
+            解除数 0 / 1
+        </small>
+    </span>
+
+    <span class="achievementMenuArrow">
+        ›
+    </span>
+</button>
+
+            <div class="codeSetting">
+
+                <div class="playStats">
+    <h2>プレイ記録</h2>
+
+    <div class="playStatsRow">
+        <span>総釣り数</span>
+        <strong id="totalFishCountText">0匹</strong>
+    </div>
+</div>
+
+    <p class="codeDescription">
+        コードを入力してください
+    </p>
+
+    <div class="codeInputRow">
+        <input
+            id="giftCodeInput"
+            type="text"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            maxlength="8"
+            autocomplete="off"
+            placeholder="コードを入力"
+            aria-label="コード入力"
+        >
+
+        <button id="useGiftCodeButton" type="button">
+            使用
+        </button>
+    </div>
+
+    <p id="giftCodeMessage" aria-live="polite"></p>
+</div>
+
+<div class="versionInfo">
+    Ver.0.0.1
+    <span id="gameVersionText"></span>
+</div>
+
+            
+        </section>
+
+        <section
+    id="achievementsScreen"
+    class="screen panelScreen"
+>
+    <div class="panelHeader">
+        <h1>実績</h1>
+
+        <span id="achievementTotalCount">
+            0 / 1
+        </span>
+    </div>
+
+    <div id="achievementList"></div>
+
+    <button
+        id="backToSettings"
+        class="backButton"
+        type="button"
+    >
+        設定へ戻る
+    </button>
+</section>
+    </main>
+
+    <footer id="bottom">
+    <button id="goHome">ホーム</button>
+    <button id="openEncyclopedia">図鑑</button>
+    <button id="openStorage">保管所</button>
+    <button id="openStore">ストア</button>
+    <button id="openCasino">カジノ</button>
+</footer>
+
+    <div
+    id="encyclopediaDetailOverlay"
+    aria-hidden="true"
+>
+    <div
+        id="encyclopediaDetailCard"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="detailFishName"
+    >
+        <button
+            id="closeEncyclopediaDetail"
+            type="button"
+            aria-label="図鑑詳細を閉じる"
+        >
+            ×
+        </button>
+
+        <img
+            id="detailFishImage"
+            src=""
+            alt=""
+        >
+
+        <div id="detailFishRarity"></div>
+
+        <h2 id="detailFishName"></h2>
+
+        <div class="detailFishStats">
+            <p id="detailFishAverageSize"></p>
+            <p id="detailFishBestSize"></p>
+            <p id="detailFishValue"></p>
+            <p id="detailFishCaught"></p>
+        </div>
+
+        <div class="detailTriviaTitle">
+            トリビア
+        </div>
+
+        <p id="detailFishTrivia"></p>
+    </div>
+</div>
+
+    <div
+    id="sellConfirmModal"
+    class="sellConfirmModal"
+    aria-hidden="true"
+>
+    <div
+        class="sellConfirmBox"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="sellConfirmTitle"
+    >
+        <h2 id="sellConfirmTitle">
+            売却確認
+        </h2>
+
+        <p id="sellConfirmMessage">
+            この魚を売却しますか？
+        </p>
+
+        <p class="sellConfirmWarning">
+            売却後は元に戻せません
+        </p>
+
+        <div class="sellConfirmActions">
+            <button
+                id="cancelSellButton"
+                type="button"
+            >
+                キャンセル
+            </button>
+
+            <button
+                id="confirmSellButton"
+                type="button"
+            >
+                売却する
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="fish.js"></script>
+<script src="gacha.js"></script>
+<script src="save.js"></script>
+<script src="achievement.js"></script>
+<script src="script.js"></script>
+    </div>
+</body>
+</html>
