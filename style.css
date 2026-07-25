@@ -1,0 +1,3301 @@
+/* テキスト選択を無効 */
+* {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* 長押しメニューや画像選択を無効 */
+img {
+    -webkit-user-drag: none;
+    user-drag: none;
+
+    -webkit-touch-callout: none;
+
+    pointer-events: none;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #0d4c91;
+}
+
+#game {
+    width: 1100px;
+    height: 720px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 20px;
+    background: linear-gradient(#2f7fd9, #114b95);
+}
+
+#topBar {
+    height: 90px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 20px 30px;
+    color: white;
+    background: #2d3554;
+}
+
+.status {
+    width: 320px;
+}
+
+#levelText {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+#expBar {
+    height: 20px;
+    margin-top: 8px;
+    overflow: hidden;
+    border-radius: 20px;
+    background: #444;
+}
+
+#exp {
+    width: 0%;
+    height: 100%;
+    background: orange;
+}
+
+.moneyArea {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+#content {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+}
+
+.screen {
+    position: absolute;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.screen.active {
+    display: flex;
+}
+
+/* ホーム画面 */
+#homeScreen {
+    gap: 0;
+}
+
+/* ホーム画面の「無料で釣る」ボタン */
+.fishButton {
+    width: 250px;
+    height: 250px;
+    border: none;
+    border-radius: 18px;
+    color: white;
+    background: #2d3554;
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+    transition:
+        transform 0.15s,
+        background 0.15s;
+}
+
+.fishButton:hover {
+    background: #3d4a74;
+    transform: translateY(-3px);
+}
+
+.fishButton:active {
+    transform: scale(0.97);
+}
+
+/* 箱を開ける画面 */
+#gachaScreen {
+    flex-direction: column;
+    gap: 30px;
+    color: white;
+}
+
+#gachaScreen h1 {
+    font-size: 38px;
+}
+
+/* 箱を開ける画面の釣り竿ボタン */
+#box {
+    width: 220px;
+    height: 220px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 20px;
+    color: white;
+    background: #2d3554;
+    font-size: 80px;
+    cursor: pointer;
+    transition:
+        transform 0.15s,
+        background 0.15s;
+}
+
+#box:hover {
+    background: #3d4a74;
+    transform: scale(1.03);
+}
+
+#box:active {
+    transform: scale(0.96);
+}
+
+/* 釣果画面全体 */
+#resultScreen {
+    position: absolute;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 0;
+    padding-top: 30px;
+    color: white;
+    cursor: pointer;
+}
+/* くじらでかい */
+.giantFish{
+    width: 2100px;
+    height: 1260px;
+}
+
+/* 「保管しました」などのメッセージ */
+#resultMessage {
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    z-index: 5;
+    width: 90%;
+    min-height: 30px;
+    margin: 0;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 21px;
+    font-weight: bold;
+    text-align: center;
+    pointer-events: none;
+}
+
+/* 釣った魚の画像・レア度・名前・売値をまとめる部分 */
+#resultFish {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: -30px;
+    margin-bottom: 25px;
+    color: white;
+    font-size: initial;
+}
+
+/* 釣果画面の魚画像 */
+.fishImage {
+    width: 500px;
+    max-width: 75vw;
+    height: 300px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+/* 釣果画面のレア度表示 */
+.fishRarity {
+    display: inline-block;
+    padding: 5px 18px;
+    border-radius: 999px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* 釣果画面の魚の名前 */
+.fishName {
+    margin-top: 8px;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+/* 釣果画面の魚の売値 */
+.fishValue {
+    margin-top: 7px;
+    font-size: 18px;
+}
+
+/* 釣果画面の保管ボタンを置く部分 */
+#resultActions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -2px;
+}
+
+/* 釣果画面の「保管」ボタン */
+#keepFish {
+    min-width: 180px;
+    padding: 13px 30px;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    background: #2f9b68;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition:
+        transform 0.15s,
+        background 0.15s;
+}
+
+#keepFish:hover:not(:disabled) {
+    background: #38ad78;
+    transform: translateY(-2px);
+}
+
+#keepFish:active:not(:disabled) {
+    transform: scale(0.97);
+}
+
+/* 魚を保管した後の「保管済み」ボタン */
+#keepFish:disabled {
+    color: #e5e5e5;
+    background: #68798a;
+    cursor: default;
+    opacity: 0.8;
+}
+
+/* 古い釣果画面の売却ボタンがHTMLに残っている場合は非表示 */
+#sellFish {
+    display: none;
+}
+
+/* レア度：コモン */
+.common {
+    background: #777;
+}
+
+/* レア度：レア */
+.rare {
+    background: #2d7cff;
+}
+
+/* レア度：エピック */
+.epic {
+    background: #a63cff;
+}
+
+/* レア度：ウルトラ */
+.ultra {
+    background: #ff9800;
+}
+
+/* レア度：最高位 */
+.supreme {
+    background: #ff3d3d;
+}
+
+/* レア度：伝説的 */
+.legendary {
+    color: #222;
+    background: #ffd700;
+}
+
+/* レア度：神話 */
+.mythic {
+    background: linear-gradient(90deg, #ff00ff, #00ffff);
+}
+
+/* 魚が出現するときの拡大アニメーション */
+@keyframes fishPop {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    60% {
+        opacity: 1;
+        transform: scale(1.15);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.fishAppear {
+    animation: fishPop 0.35s ease-out;
+}
+
+/* 保管所・図鑑・設定画面 */
+.panelScreen {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 22px;
+    overflow-y: auto;
+    padding: 32px;
+    color: white;
+}
+
+/* 保管所上部のタイトルと保管数 */
+.panelHeader {
+    width: min(900px, 100%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.panelHeader h1 {
+    font-size: 32px;
+}
+
+#storageCount {
+    font-size: 21px;
+    font-weight: bold;
+}
+
+/* 保管所の魚一覧 */
+#storageList {
+    width: min(900px, 100%);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 18px;
+}
+
+/* 保管所の魚カード */
+.storageCard {
+    padding: 16px;
+    border-radius: 16px;
+    text-align: center;
+    background: rgba(45, 53, 84, 0.92);
+}
+
+/* 保管所カード内の魚画像 */
+.storageCard img {
+    width: 100%;
+    height: 125px;
+    object-fit: contain;
+}
+
+/* 保管所カード内の魚名 */
+.storageCard h2 {
+    margin: 10px 0 6px;
+    font-size: 21px;
+}
+
+/* 保管所カード内のレア度 */
+.storageCard .fishRarity {
+    display: inline-block;
+    font-size: 14px;
+}
+
+/* 保管所カード内の売値 */
+.storageCard p {
+    margin-top: 7px;
+    font-size: 16px;
+}
+
+/* 保管所カード内の「売却」ボタン */
+.storageSellButton {
+    margin-top: 12px;
+    padding: 9px 20px;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    background: #d58b2a;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition:
+        transform 0.15s,
+        background 0.15s;
+}
+
+.storageSellButton:hover {
+    background: #e59a36;
+    transform: translateY(-2px);
+}
+
+.storageSellButton:active {
+    transform: scale(0.96);
+}
+
+/* 保管所に魚がいないときの文字 */
+.emptyMessage {
+    grid-column: 1 / -1;
+    padding: 60px;
+    text-align: center;
+    font-size: 22px;
+}
+
+/* 保管所・図鑑・設定の「ホームへ戻る」ボタン */
+.backButton {
+    padding: 14px 30px;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    background: #3d4a74;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition:
+        transform 0.15s,
+        background 0.15s;
+}
+
+.backButton:hover {
+    background: #4b5b8d;
+    transform: translateY(-2px);
+}
+
+.backButton:active {
+    transform: scale(0.97);
+}
+
+/* 画面下部のメニューバー */
+#bottom {
+    height: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 20px;
+    background: #2d3554;
+}
+
+/* 下部メニュー共通ボタン */
+#bottom button {
+    width: 170px;
+    height: 55px;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    background: #3d4a74;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    transition:
+        transform 0.15s,
+        background 0.15s;
+}
+
+#bottom button:hover {
+    background: #4b5b8d;
+    transform: translateY(-2px);
+}
+
+#bottom button:active {
+    transform: scale(0.97);
+}
+
+/* 下部メニューの「図鑑」ボタン */
+#openEncyclopedia {
+    background: #3d4a74;
+}
+
+/* 下部メニューの「保管所」ボタン */
+#openStorage {
+    background: #2f746f;
+}
+
+/* 下部メニューの「設定」ボタン */
+#openCasino {
+    background: #6a4f87;
+}
+
+
+@media (max-width: 800px) {
+    body {
+        align-items: stretch;
+    }
+
+    #game {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+    }
+
+    #topBar {
+        height: 80px;
+        padding: 16px 20px;
+    }
+
+    .status {
+        width: 220px;
+    }
+
+    #resultScreen {
+        padding-top: 20px;
+    }
+
+    #resultMessage {
+        top: 14px;
+        font-size: 18px;
+    }
+
+    #resultFish {
+        margin-top: 58px;
+    }
+
+    .fishImage {
+        width: min(82vw, 500px);
+        height: 260px;
+    }
+
+
+    #resultActions {
+        margin-top: -2px;
+    }
+
+    #bottom {
+        height: 80px;
+        gap: 12px;
+        padding: 0 12px;
+    }
+
+    #bottom button {
+        width: 31%;
+        height: 52px;
+        font-size: 17px;
+    }
+
+    .panelScreen {
+        padding: 22px 16px;
+    }
+
+    #storageList {
+        grid-template-columns: repeat(
+            auto-fill,
+            minmax(145px, 1fr)
+        );
+        gap: 12px;
+    }
+
+    .storageCard {
+        padding: 12px;
+    }
+
+    .storageCard img {
+        height: 105px;
+    }
+}
+.levelRow {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+#levelText {
+    flex-shrink: 0;
+}
+
+#expText {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 15px;
+    font-weight: bold;
+}
+
+#expBar {
+    position: relative;
+    overflow: visible;
+}
+
+#exp {
+    overflow: hidden;
+    border-radius: inherit;
+    transition: width 0.35s ease;
+}
+
+#expPopupArea {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 20;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+}
+
+.expPopup {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: max-content;
+    color: #fff6a5;
+    font-size: 18px;
+    font-weight: bold;
+    text-shadow:
+        0 2px 3px rgba(0, 0, 0, 0.8),
+        0 0 8px rgba(255, 215, 0, 0.8);
+    pointer-events: none;
+    animation: expFloat 1.1s ease-out forwards;
+}
+
+@keyframes expFloat {
+    0% {
+        opacity: 0;
+        transform:
+            translate(
+                calc(-50% + var(--random-x)),
+                calc(-50% + var(--random-y))
+            )
+            scale(0.8);
+    }
+
+    20% {
+        opacity: 1;
+        transform:
+            translate(
+                calc(-50% + var(--random-x)),
+                calc(-65% + var(--random-y))
+            )
+            scale(1.08);
+    }
+
+    100% {
+        opacity: 0;
+        transform:
+            translate(
+                calc(-50% + var(--random-x)),
+                calc(-140% + var(--random-y))
+            )
+            scale(1);
+    }
+}
+
+.levelUpPopup {
+    position: fixed;
+    top: 38%;
+    left: 50%;
+    z-index: 1000000;
+    width: max-content;
+    transform: translate(-50%, -50%);
+    color: #fff6a5;
+    font-size: 42px;
+    font-weight: bold;
+    text-shadow:
+        0 4px 4px rgba(0, 0, 0, 0.8),
+        0 0 12px rgba(255, 215, 0, 0.9);
+    pointer-events: none;
+    animation: levelUpAppear 1.5s ease-out forwards;
+}
+
+@keyframes levelUpAppear {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -30%) scale(0.5);
+    }
+
+    20% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+
+    65% {
+        opacity: 1;
+        transform: translate(-50%, -55%) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -85%) scale(1);
+    }
+}
+
+#box:disabled {
+    pointer-events: none;
+}
+
+#game {
+    position: relative;
+}
+
+.sellConfirmModal {
+    position: absolute;
+    inset: 0;
+    z-index: 99999;
+
+    display: none;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+    background: rgba(10, 20, 45, 0.72);
+
+    pointer-events: auto;
+}
+
+.sellConfirmModal.active {
+    display: flex;
+}
+
+.sellConfirmBox {
+    position: relative;
+    z-index: 100000;
+
+    width: min(420px, 90%);
+    padding: 28px;
+
+    border: 3px solid rgba(255, 255, 255, 0.25);
+    border-radius: 18px;
+
+    color: white;
+    text-align: center;
+    background: #2d3554;
+
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+
+    pointer-events: auto;
+
+    animation: sellConfirmOpen 0.2s ease-out;
+}
+
+.sellConfirmBox h2 {
+    margin: 0 0 16px;
+    font-size: 28px;
+}
+
+#sellConfirmMessage {
+    margin: 0 0 10px;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 1.5;
+}
+
+.sellConfirmWarning {
+    margin: 0 0 24px;
+    color: #ffd0d0;
+    font-size: 15px;
+}
+
+.sellConfirmActions {
+    position: relative;
+    z-index: 100001;
+
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+
+    pointer-events: auto;
+}
+
+.sellConfirmActions button {
+    position: relative;
+    z-index: 100002;
+
+    min-width: 135px;
+    padding: 13px 20px;
+
+    border: none;
+    border-radius: 12px;
+
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+#cancelSellButton {
+    background: #68798a;
+}
+
+#confirmSellButton {
+    background: #d83b3b;
+}
+
+#cancelSellButton:hover {
+    background: #788b9e;
+}
+
+#confirmSellButton:hover {
+    background: #ed4b4b;
+}
+
+.sellConfirmActions button:active {
+    transform: scale(0.96);
+}
+
+@keyframes sellConfirmOpen {
+    from {
+        opacity: 0;
+        transform: scale(0.85);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.volumeSetting {
+    width: 88%;
+    max-width: 360px;
+
+    margin: 16px auto 0;
+    padding: 10px 14px;
+
+    border: 2px solid #6bd8ff;
+    border-radius: 12px;
+
+    background: rgba(23, 55, 97, 0.92);
+
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+}
+
+.volumeHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 8px;
+}
+
+.volumeIcon {
+    width: 28px;
+    font-size: 22px;
+    text-align: center;
+}
+
+.volumeLabel {
+    flex: 1;
+
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#volumeValue,
+#bgmVolumeValue {
+    min-width: 52px;
+    padding: 2px 8px;
+
+    border-radius: 8px;
+
+    color: white;
+    background: #2d7cb5;
+
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.volumeSlider {
+    width: 100%;
+    height: 6px;
+
+    margin: 2px 0 0;
+
+    appearance: none;
+    -webkit-appearance: none;
+
+    border: none;
+    border-radius: 999px;
+    outline: none;
+
+    background: #7fdfff;
+
+    cursor: pointer;
+}
+
+/* Chrome・Edge・Safari */
+.volumeSlider::-webkit-slider-thumb {
+    width: 18px;
+    height: 18px;
+
+    appearance: none;
+    -webkit-appearance: none;
+
+    border: 3px solid #42b8ff;
+    border-radius: 50%;
+
+    background: white;
+
+    cursor: pointer;
+}
+
+/* Firefox */
+.volumeSlider::-moz-range-track {
+    height: 6px;
+
+    border: none;
+    border-radius: 999px;
+
+    background: #7fdfff;
+}
+
+.volumeSlider::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+
+    border: 3px solid #42b8ff;
+    border-radius: 50%;
+
+    background: white;
+
+    cursor: pointer;
+}
+
+@keyframes bubbleUp{
+
+    0%{
+
+        transform:
+        translateX(0)
+        translateY(0);
+
+        opacity:0;
+    }
+
+    15%{
+
+        opacity:.7;
+    }
+
+    50%{
+
+        transform:
+        translateX(20px)
+        translateY(-45vh);
+    }
+
+    75%{
+
+        transform:
+        translateX(-15px)
+        translateY(-70vh);
+    }
+
+    100%{
+
+        transform:
+        translateX(10px)
+        translateY(-110vh);
+
+        opacity:0;
+    }
+
+}
+
+
+#bubbleBackground{
+    position:absolute;
+    inset:0;
+
+    overflow:hidden;
+
+    z-index:0;
+
+    pointer-events:none;
+}
+.bubble{
+
+    position:absolute;
+
+    bottom:-80px;
+
+    border-radius:50%;
+
+    background:
+    rgba(255,255,255,.18);
+
+    border:
+    1px solid rgba(255,255,255,.3);
+
+    animation:
+    bubbleUp linear forwards;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+}
+
+body {
+    position: relative;
+    overflow-x: hidden;
+    background: #063b68;
+}
+
+#deepBackground {
+    position: fixed;
+    inset: 0;
+
+    z-index: -3;
+
+    background:
+        radial-gradient(
+            circle at 65% 0%,
+            rgba(120, 220, 255, 0.55),
+            transparent 45%
+        ),
+        linear-gradient(
+            to bottom,
+            #249ed0 0%,
+            #0878ad 45%,
+            #064b7c 100%
+        );
+}
+#bubbleBackground {
+    position: fixed;
+    inset: 0;
+
+    overflow: hidden;
+    pointer-events: none;
+
+    z-index: -2;
+}
+#game {
+    position: relative;
+    z-index: 1;
+
+    background: rgba(64, 148, 218, 0.52);
+}
+.storageCard{
+
+    position:relative;
+
+}
+
+.favoriteBtn{
+
+    position:absolute;
+
+    top:8px;
+    right:8px;
+
+    width:34px;
+    height:34px;
+
+    border:none;
+
+    background:none;
+
+    font-size:24px;
+
+    cursor:pointer;
+
+    color:#bbb;
+
+    transition:.2s;
+
+}
+
+.favoriteBtn.active{
+
+    color:#ff5b88;
+
+}
+
+.favoriteBtn:hover{
+
+    transform:scale(1.15);
+
+}
+.storageSellButton:disabled{
+
+    opacity:.45;
+
+    cursor:default;
+
+    pointer-events:none;
+
+}
+
+/* =========================
+   相棒ボタン
+========================= */
+
+.storageCard {
+    position: relative;
+}
+
+.favoriteBtn,
+.partnerBtn {
+    position: absolute;
+    right: 8px;
+
+    width: 34px;
+    height: 34px;
+
+    padding: 0;
+    border: none;
+    background: transparent;
+
+    font-size: 25px;
+    line-height: 34px;
+
+    cursor: pointer;
+    transition:
+        transform 0.2s,
+        opacity 0.2s;
+}
+
+/* ハートは右上 */
+.favoriteBtn {
+    top: 8px;
+    color: #aaaaaa;
+}
+
+.favoriteBtn.active {
+    color: #ff5b88;
+}
+
+/* 星はハートの下 */
+.partnerBtn {
+    top: 44px;
+    color: #c6a400;
+}
+
+.favoriteBtn:hover,
+.partnerBtn:hover {
+    transform: scale(1.15);
+}
+
+.partnerBtn.active {
+    color: #ffd700;
+    animation: partnerStarPop 0.3s;
+}
+
+@keyframes partnerStarPop {
+    0% {
+        transform: scale(0.6) rotate(-20deg);
+    }
+
+    70% {
+        transform: scale(1.4) rotate(10deg);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* 相棒の背景 */
+
+#partnerFishLayer {
+    position: fixed;
+    inset: 0;
+
+    overflow: hidden;
+    pointer-events: none;
+
+    z-index: 1;
+
+    /* 相棒がいない間は表示しない */
+    display: none;
+}
+
+#partnerFishLayer.active {
+    display: block;
+}
+
+#partnerFishImage {
+    display: none;
+    position: absolute;
+
+    width: 380px;
+    height: 280px;
+    object-fit: contain;
+
+    left: -220px;
+    top: 42%;
+
+    opacity: 0.9;
+
+    filter:
+        drop-shadow(0 8px 8px rgba(0, 0, 0, 0.2));
+
+    animation:
+        partnerSwim 50s linear infinite,
+        partnerFloat 6.5s ease-in-out infinite;
+
+    /* 画像を大きくする */
+    width: 380px;
+    height: 280px;
+    object-fit: contain;
+
+    left: -220px;
+    top: 42%;
+
+    opacity: 0.9;
+
+    filter:
+        drop-shadow(0 8px 8px rgba(0, 0, 0, 0.2));
+
+}
+
+#partnerFishImage.giantPartnerFish{
+    animation:
+        whaleSwim 50s linear infinite,
+        partnerFloat 6.5s ease-in-out infinite;
+}
+
+@keyframes whaleSwim{
+    0%   { left:-70%; transform:translateY(-50%) scaleX(-1); }
+    47%  { left:150%; transform:translateY(-50%) scaleX(-1); }
+    48%  { left:150%; transform:translateY(-50%) scaleX(1); }
+    97%  { left:-70%; transform:translateY(-50%) scaleX(1); }
+    98%,100% { left:-70%; transform:translateY(-50%) scaleX(-1); }
+}
+
+#partnerFishImage.giantPartnerFish{
+    width: 1040px;
+    height: 780px;
+}
+
+
+/* 左右への移動 */
+@keyframes partnerSwim {
+    0% {
+        left: -40%;
+        transform: translateY(-50%) scaleX(-1);
+    }
+
+    47% {
+        left: 110%;
+        transform: translateY(-50%) scaleX(-1);
+    }
+
+    48% {
+        left: 110%;
+        transform: translateY(-50%) scaleX(1);
+    }
+
+    97% {
+        left: -40%;
+        transform: translateY(-50%) scaleX(1);
+    }
+
+    98%,
+    100% {
+        left: -40%;
+        transform: translateY(-50%) scaleX(-1);
+    }
+}
+
+
+/* 優雅な上下の動き */
+@keyframes partnerFloat {
+    0%,
+    100% {
+        margin-top: -18px;
+    }
+
+    50% {
+        margin-top: 18px;
+    }
+}
+
+/* =========================
+   図鑑
+========================= */
+
+.encyclopediaHeader {
+    flex-shrink: 0;
+}
+
+#encyclopediaTotalCount {
+    padding: 9px 16px;
+    border-radius: 999px;
+
+    color: white;
+    background: rgba(45, 53, 84, 0.9);
+
+    font-size: 19px;
+    font-weight: bold;
+}
+
+
+/* 図鑑全体 */
+#encyclopediaList {
+    width: min(900px, 100%);
+
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+
+/* レア度ごとのゾーン */
+.encyclopediaRarityZone {
+    padding: 18px;
+
+    border-radius: 18px;
+
+    background: rgba(21, 55, 103, 0.62);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+
+/* 各ゾーン上部 */
+.encyclopediaRarityHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+
+    margin-bottom: 16px;
+}
+
+
+/* レア度タイトル */
+.encyclopediaRarityTitle {
+    display: inline-block;
+
+    padding: 7px 20px;
+    border-radius: 999px;
+
+    color: white;
+    font-size: 21px;
+    font-weight: bold;
+}
+
+
+/* レア度ごとの発見数 */
+.encyclopediaRarityCount {
+    color: white;
+
+    font-size: 17px;
+    font-weight: bold;
+}
+
+
+/* 各ゾーンの魚一覧 */
+.encyclopediaFishGrid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(180px, 1fr));
+
+    gap: 18px;
+}
+
+
+/* 図鑑カード */
+.encyclopediaCard {
+    min-width: 0;
+    padding: 16px;
+
+    border-radius: 16px;
+
+    text-align: center;
+
+    background: rgba(45, 53, 84, 0.94);
+
+    box-shadow:
+        0 6px 14px rgba(0, 0, 0, 0.2);
+
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s;
+}
+
+.encyclopediaCard:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 9px 18px rgba(0, 0, 0, 0.28);
+}
+
+
+/* 図鑑の魚画像 */
+.encyclopediaFishImage {
+    width: 100%;
+    height: 125px;
+
+    object-fit: contain;
+}
+
+
+/* 未発見魚の黒いシルエット */
+.encyclopediaCard.undiscovered
+.encyclopediaFishImage {
+    filter:
+        brightness(0)
+        drop-shadow(0 5px 4px rgba(0, 0, 0, 0.4));
+
+    opacity: 0.85;
+}
+
+
+/* 魚のレア度 */
+.encyclopediaCard .fishRarity {
+    display: inline-block;
+
+    margin-top: 5px;
+
+    font-size: 14px;
+}
+
+
+/* 魚の名前 */
+.encyclopediaCard h2 {
+    min-height: 26px;
+
+    margin: 10px 0 7px;
+
+    color: white;
+
+    font-size: 20px;
+    word-break: break-word;
+}
+
+
+/* 売値と釣った数 */
+.encyclopediaCard p {
+    margin-top: 6px;
+
+    color: rgba(255, 255, 255, 0.9);
+
+    font-size: 15px;
+}
+
+
+/* 未発見魚の文字を少し暗くする */
+.encyclopediaCard.undiscovered h2,
+.encyclopediaCard.undiscovered p {
+    color: rgba(255, 255, 255, 0.58);
+}
+
+
+/* スマホ表示 */
+@media (max-width: 800px) {
+
+    .encyclopediaHeader {
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    #encyclopediaTotalCount {
+        padding: 8px 12px;
+        font-size: 15px;
+    }
+
+    .encyclopediaRarityZone {
+        padding: 13px;
+    }
+
+    .encyclopediaRarityHeader {
+        align-items: flex-start;
+    }
+
+    .encyclopediaRarityTitle {
+        padding: 6px 15px;
+        font-size: 18px;
+    }
+
+    .encyclopediaRarityCount {
+        font-size: 14px;
+    }
+
+    .encyclopediaFishGrid {
+        grid-template-columns:
+            repeat(auto-fill, minmax(140px, 1fr));
+
+        gap: 12px;
+    }
+
+    .encyclopediaCard {
+        padding: 12px;
+    }
+
+    .encyclopediaFishImage {
+        height: 105px;
+    }
+
+    .encyclopediaCard h2 {
+        font-size: 17px;
+    }
+
+    .encyclopediaCard p {
+        font-size: 13px;
+    }
+
+}
+
+/* =========================
+   図鑑詳細カード
+========================= */
+
+#encyclopediaDetailOverlay {
+    position: absolute;
+    inset: 0;
+    z-index: 5000;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+
+    padding: 20px 20px 0;
+
+    background: rgba(5, 15, 35, 0.7);
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
+}
+
+#encyclopediaDetailOverlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+#encyclopediaDetailCard {
+    position: relative;
+
+    width: min(620px, 100%);
+    max-height: calc(100% - 25px);
+
+    padding: 28px 30px 35px;
+
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    border: 3px solid rgba(255, 255, 255, 0.25);
+    border-bottom: none;
+    border-radius: 28px 28px 0 0;
+
+    color: white;
+    text-align: center;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(51, 82, 132, 0.98),
+            rgba(26, 46, 82, 0.99)
+        );
+
+    box-shadow:
+        0 -12px 40px rgba(0, 0, 0, 0.4);
+
+    transform: translateY(105%);
+
+    transition: transform 0.3s ease;
+}
+
+#encyclopediaDetailOverlay.active
+#encyclopediaDetailCard {
+    transform: translateY(0);
+}
+
+#closeEncyclopediaDetail {
+    position: absolute;
+    top: 15px;
+    right: 18px;
+    z-index: 2;
+
+    width: 42px;
+    height: 42px;
+
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+
+    color: white;
+    background: rgba(255, 255, 255, 0.15);
+
+    font-size: 30px;
+    line-height: 42px;
+
+    cursor: pointer;
+}
+
+#closeEncyclopediaDetail:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+#detailFishImage {
+    display: block;
+
+    width: min(520px, 90%);
+    height: 360px;
+
+    margin: 10px auto 16px;
+
+    object-fit: contain;
+
+    filter:
+        drop-shadow(0 12px 10px rgba(0, 0, 0, 0.3));
+}
+
+#detailFishRarity {
+    display: inline-block;
+
+    margin-top: 2px;
+    padding: 6px 20px;
+    border-radius: 999px;
+
+    font-size: 17px;
+    font-weight: bold;
+}
+
+#detailFishName {
+    margin: 14px 0 18px;
+
+    color: white;
+    font-size: 32px;
+}
+
+.detailFishStats {
+    width: min(400px, 100%);
+
+    margin: 0 auto;
+    padding: 14px 18px;
+
+    border-radius: 14px;
+
+    background: rgba(0, 0, 0, 0.18);
+}
+
+.detailFishStats p {
+    margin: 5px 0;
+
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.detailTriviaTitle {
+    margin-top: 24px;
+    padding-bottom: 8px;
+
+    border-bottom: 2px solid rgba(255, 255, 255, 0.25);
+
+    color: #fff2a5;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+#detailFishTrivia {
+    margin-top: 14px;
+
+    color: rgba(255, 255, 255, 0.92);
+
+    font-size: 17px;
+    line-height: 1.8;
+    text-align: left;
+
+    white-space: pre-line;
+}
+
+/* 図鑑カードを押せるように見せる */
+.encyclopediaCard {
+    cursor: pointer;
+}
+
+.encyclopediaCard:active {
+    transform: scale(0.98);
+}
+
+@media (max-width: 800px) {
+    #encyclopediaDetailOverlay {
+        padding: 12px 8px 0;
+    }
+
+    #encyclopediaDetailCard {
+        max-height: calc(100% - 10px);
+        padding: 24px 18px 30px;
+        border-radius: 24px 24px 0 0;
+    }
+
+    #detailFishImage {
+        width: min(320px, 90%);
+        height: 290px;
+        margin-top: 30px;
+    }
+
+    #detailFishName {
+        font-size: 27px;
+    }
+
+    .detailFishStats p {
+        font-size: 16px;
+    }
+
+    #detailFishTrivia {
+        font-size: 15px;
+    }
+}
+@media (min-width:801px){
+
+    /* ゲーム画面からはみ出せるようにする */
+    #game{
+        overflow: visible;
+    }
+
+    /* 背景は画面全体 */
+    #encyclopediaDetailOverlay{
+
+        position:fixed;
+
+        inset:0;
+
+        z-index:5000;
+    }
+
+    /* カードをゲーム画面より大きく */
+    #encyclopediaDetailCard{
+
+        width:780px;
+
+        max-height:none;
+
+        height:820px;
+
+        overflow:hidden;
+
+        border-radius:35px 35px 0 0;
+
+        transform:translateY(120px);
+    }
+
+    #encyclopediaDetailOverlay.active
+    #encyclopediaDetailCard{
+
+        transform:translateY(0);
+    }
+
+}
+
+/* サイズシステム */
+.fishInfo{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+
+    width:100%;
+    margin-top:10px;
+
+    text-align:center;
+}
+
+.fishSize,
+.fishSeparator,
+.fishValue{
+    display:flex;
+    align-items:center;
+
+    font-size:22px;
+    font-weight:700;
+    line-height:1;
+
+    margin:0;
+    padding:0;
+}
+
+.fishSize.newRecord{
+    color:#ffd700;
+    text-shadow:
+        0 0 6px rgba(255,215,0,.95),
+        0 0 14px rgba(255,193,7,.7);
+}
+/* =========================
+   100回ごとの確定BOX
+========================= */
+
+#box.epicBoxReady {
+    position: relative;
+
+    border: 2px solid rgba(255, 230, 130, 0.75);
+
+    background:
+        radial-gradient(
+            circle at center,
+            #4e557e 0%,
+            #343b61 65%,
+            #2d3554 100%
+        );
+
+    animation:
+        epicBoxGlow 1.6s ease-in-out infinite;
+}
+
+@keyframes epicBoxGlow {
+    0%,
+    100% {
+        box-shadow:
+            0 0 8px rgba(255, 215, 90, 0.25),
+            0 0 16px rgba(255, 215, 90, 0.12);
+
+        filter: brightness(1);
+    }
+
+    50% {
+        box-shadow:
+            0 0 18px rgba(255, 225, 120, 0.65),
+            0 0 42px rgba(255, 205, 70, 0.42),
+            0 0 70px rgba(255, 225, 140, 0.2);
+
+        filter: brightness(1.12);
+    }
+}
+
+/* =========================
+   ストア
+========================= */
+
+#storeScreen {
+    align-items: center;
+}
+
+
+.storeMessage {
+    width: min(900px, 100%);
+    min-height: 28px;
+
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.storeMessage.success {
+    color: #b8ffd6;
+}
+
+.storeMessage.error {
+    color: #ffd0d0;
+}
+
+.storeSection {
+    width: min(900px, 100%);
+}
+
+.storeSectionHeader {
+    margin-bottom: 14px;
+    padding: 15px 18px;
+
+    border-radius: 15px;
+
+    background: rgba(21, 55, 103, 0.7);
+}
+
+.storeSectionHeader h2 {
+    color: white;
+    font-size: 25px;
+}
+
+.storeSectionHeader p {
+    margin-top: 5px;
+
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 15px;
+}
+
+.storeGrid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(240px, 1fr));
+
+    gap: 16px;
+}
+
+.storeCard {
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+    padding: 18px;
+
+    border: 2px solid rgba(255, 255, 255, 0.14);
+    border-radius: 17px;
+
+    background: rgba(45, 53, 84, 0.94);
+
+    box-shadow:
+        0 7px 17px rgba(0, 0, 0, 0.22);
+}
+
+.storeItemVisual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 115px;
+
+    font-size: 70px;
+}
+
+.trophyVisual {
+    font-size: 76px;
+}
+
+.storeItemBody {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+
+.storeItemBody h3 {
+    color: white;
+    font-size: 22px;
+    text-align: center;
+}
+
+.storeItemDescription {
+    min-height: 48px;
+    margin-top: 9px;
+
+    color: rgba(255, 255, 255, 0.82);
+
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.storeOwnedText,
+.storeEffectText {
+    margin-top: 9px;
+
+    color: white;
+    font-size: 15px;
+    text-align: center;
+}
+
+.storeEffectText {
+    color: #9eeeff;
+}
+
+.storePrice {
+    margin: 14px 0;
+
+    color: #ffe27a;
+
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.storeCardActions {
+    display: flex;
+    gap: 9px;
+
+    margin-top: auto;
+}
+
+.storeBuyButton,
+.storeEquipButton {
+    width: 100%;
+    min-height: 44px;
+
+    padding: 10px 14px;
+
+    border: none;
+    border-radius: 11px;
+
+    color: white;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s,
+        background 0.15s,
+        opacity 0.15s;
+}
+
+.storeBuyButton {
+    background: #d58b2a;
+}
+
+.storeBuyButton:hover:not(:disabled) {
+    background: #e69b39;
+    transform: translateY(-2px);
+}
+
+.storeEquipButton {
+    background: #386d9c;
+}
+
+.storeEquipButton:hover:not(:disabled) {
+    background: #4782b5;
+    transform: translateY(-2px);
+}
+
+.storeEquipButton.active {
+    background: #2f9b68;
+}
+
+.storeBuyButton:disabled,
+.storeEquipButton:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+
+.storeBuyButton:active:not(:disabled),
+.storeEquipButton:active:not(:disabled) {
+    transform: scale(0.97);
+}
+
+/* =========================
+   ホーム画面のトロフィー
+========================= */
+
+#trophyDisplayLayer {
+    position: absolute;
+    left: 24px;
+    bottom: 4px;
+    z-index: 5;
+    display: none;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
+    box-shadow: none;
+    pointer-events: none;
+}
+
+#trophyDisplayLayer {
+    position: absolute;
+
+    left: 24px;
+    bottom: 4px;
+
+    z-index: 5;
+
+    display: none;
+
+    padding: 0;
+    margin: 0;
+
+    border: none;
+    background: none;
+    box-shadow: none;
+
+    pointer-events: none;
+}
+
+#trophyDisplayLayer.hasTrophy.screenVisible {
+    display: block;
+}
+
+#equippedTrophyVisual {
+    font-size: 82px;
+    line-height: 1;
+
+    filter: none;
+    text-shadow: none;
+}
+
+#equippedTrophyVisual img {
+    display: block;
+
+    max-width: 100%;
+    height: auto;
+
+    filter: none;
+    box-shadow: none;
+}
+
+@keyframes trophyAppear {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.75);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+#buyBaitButton {
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+}
+
+@media (max-width: 800px) {
+    .storeGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .storeCardActions {
+        flex-direction: column;
+    }
+
+    #trophyDisplayLayer {
+        left: 14px;
+        bottom: 2px;
+    }
+
+    #equippedTrophyVisual {
+        font-size: 62px;
+    }
+}
+/* =========================
+   お金表示と設定ボタン
+========================= */
+
+.moneySettingsArea {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.topSettingsButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 42px;
+    height: 42px;
+
+    padding: 0;
+
+    border: none;
+    border-radius: 50%;
+
+    color: white;
+    background: rgba(45, 53, 84, 0.92);
+
+    font-size: 21px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s,
+        background 0.15s;
+}
+
+.topSettingsButton:hover {
+    background: rgba(67, 79, 125, 0.96);
+}
+
+.topSettingsButton:active {
+    transform: scale(0.92);
+}
+
+/* =========================
+   カジノ選択画面
+========================= */
+
+.casinoNotice {
+    margin: 5px 0 22px;
+
+    color: rgba(255, 255, 255, 0.8);
+
+    font-size: 15px;
+    text-align: center;
+}
+
+.casinoGameGrid {
+    display: grid;
+
+    width: min(850px, 100%);
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(230px, 1fr));
+
+    gap: 18px;
+}
+
+.casinoGameCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    min-height: 280px;
+    padding: 24px 18px;
+
+    border: 2px solid rgba(255, 255, 255, 0.18);
+    border-radius: 20px;
+
+    color: white;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(46, 67, 119, 0.96),
+            rgba(29, 39, 77, 0.96)
+        );
+
+    box-shadow:
+        0 9px 20px rgba(0, 0, 0, 0.25);
+
+    cursor: pointer;
+
+    transition:
+        transform 0.18s,
+        border-color 0.18s,
+        box-shadow 0.18s;
+}
+
+button.casinoGameCard:hover {
+    border-color: rgba(122, 239, 255, 0.85);
+
+    box-shadow:
+        0 12px 25px rgba(0, 0, 0, 0.32);
+
+    transform: translateY(-5px);
+}
+
+button.casinoGameCard:active {
+    transform: scale(0.97);
+}
+
+.casinoGameIcon {
+    margin-bottom: 16px;
+
+    font-size: 75px;
+    line-height: 1;
+}
+
+.casinoGameName {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.casinoGameDescription {
+    margin-top: 13px;
+
+    color: rgba(255, 255, 255, 0.78);
+
+    font-size: 14px;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.casinoPlayableLabel,
+.casinoUnavailableLabel {
+    margin-top: auto;
+    padding: 7px 14px;
+
+    border-radius: 999px;
+
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.casinoPlayableLabel {
+    color: #d7fff0;
+    background: rgba(31, 160, 104, 0.75);
+}
+
+.casinoUnavailableLabel {
+    color: rgba(255, 255, 255, 0.65);
+    background: rgba(100, 100, 110, 0.7);
+}
+
+.casinoGameCard.unavailable {
+    opacity: 0.55;
+    cursor: default;
+}
+
+/* =========================
+   クラッシュ準備画面
+========================= */
+
+.crashPreparingPanel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: min(600px, 100%);
+    padding: 35px 25px;
+
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 22px;
+
+    color: white;
+    background: rgba(32, 44, 84, 0.94);
+
+    text-align: center;
+
+    box-shadow:
+        0 10px 24px rgba(0, 0, 0, 0.28);
+}
+
+.crashPreparingIcon {
+    font-size: 90px;
+    line-height: 1;
+}
+
+.crashPreparingPanel h2 {
+    margin-top: 18px;
+    font-size: 31px;
+}
+
+.crashPreparingPanel p {
+    margin-top: 13px;
+
+    color: rgba(255, 255, 255, 0.82);
+
+    line-height: 1.7;
+}
+
+.crashPreparingText {
+    padding: 8px 15px;
+
+    border-radius: 999px;
+
+    color: #bdefff !important;
+    background: rgba(56, 109, 156, 0.55);
+
+    font-weight: bold;
+}
+
+/* =========================
+   シンプルなクラッシュゲーム
+========================= */
+
+.crashGamePanel {
+    width: min(720px, 100%);
+    padding: 22px;
+    border: 2px solid rgba(255, 255, 255, 0.14);
+    border-radius: 20px;
+    background: rgba(20, 29, 57, 0.94);
+}
+
+.crashGraphArea {
+    position: relative;
+
+    width: 100%;
+    height: 330px;
+
+    overflow: hidden;
+
+    border: 2px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(14, 23, 48, 0.96),
+            rgba(26, 40, 72, 0.96)
+        );
+}
+
+#crashGraphCanvas {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    pointer-events: none;
+}
+
+.crashMultiplier {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+
+    transform:
+        translate(-50%, -50%);
+
+    width: 100%;
+
+    color: #78ffb2;
+
+    font-size:
+        clamp(58px, 10vw, 100px);
+
+    font-weight: 900;
+    line-height: 1;
+    text-align: center;
+
+    text-shadow:
+        0 0 12px
+        rgba(75, 255, 160, 0.75),
+        0 5px 15px
+        rgba(0, 0, 0, 0.7);
+
+    pointer-events: none;
+}
+
+.crashMultiplier.crashed {
+    color: #ff656e;
+
+    text-shadow:
+        0 0 16px
+        rgba(255, 60, 70, 0.8),
+        0 5px 15px
+        rgba(0, 0, 0, 0.7);
+
+    animation:
+        crashNumberShake 0.35s;
+}
+
+.crashMultiplier.cashedOut {
+    color: #ffe168;
+
+    text-shadow:
+        0 0 16px
+        rgba(255, 220, 80, 0.75),
+        0 5px 15px
+        rgba(0, 0, 0, 0.7);
+}
+
+.crashMessage {
+    min-height: 30px;
+
+    margin: 14px 0;
+
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.crashMessage.success {
+    color: #80ffc0;
+}
+
+.crashMessage.error {
+    color: #ff9197;
+}
+
+.crashControlRow {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 10px;
+
+    width: min(520px, 100%);
+    margin: 0 auto;
+}
+
+.crashBetInputArea {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    flex: 1;
+
+    padding: 0 14px;
+
+    border: 2px solid #669ee8;
+    border-radius: 12px;
+
+    background: white;
+}
+
+#crashBetInput {
+    width: 100%;
+    min-width: 0;
+
+    padding: 13px 0;
+
+    border: none;
+    outline: none;
+
+    color: #18233c;
+    background: transparent;
+
+    font-size: 21px;
+    font-weight: bold;
+    text-align: right;
+}
+
+.crashBetInputArea span {
+    flex-shrink: 0;
+
+    color: #18233c;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.startCrashButton {
+    min-width: 180px;
+
+    padding: 13px 20px;
+
+    border: none;
+    border-radius: 12px;
+
+    color: white;
+    background: #3479d7;
+
+    font-size: 19px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s,
+        background 0.15s;
+}
+
+.startCrashButton:hover {
+    background: #438be9;
+    transform: translateY(-2px);
+}
+
+.startCrashButton:active {
+    transform: scale(0.97);
+}
+
+.startCrashButton.cashOutMode {
+    background: #25a86d;
+}
+
+.startCrashButton.cashOutMode:hover {
+    background: #30bd7c;
+}
+
+#backToCasino:disabled {
+    opacity: 0.45;
+    cursor: default;
+    pointer-events: none;
+}
+
+@keyframes crashNumberShake {
+    0%,
+    100% {
+        transform:
+            translate(-50%, -50%)
+            translateX(0);
+    }
+
+    25% {
+        transform:
+            translate(-50%, -50%)
+            translateX(-10px);
+    }
+
+    50% {
+        transform:
+            translate(-50%, -50%)
+            translateX(10px);
+    }
+
+    75% {
+        transform:
+            translate(-50%, -50%)
+            translateX(-5px);
+    }
+}
+
+@media (max-width: 600px) {
+    .crashGamePanel {
+        padding: 14px;
+    }
+
+    .crashGraphArea {
+        height: 270px;
+    }
+
+    .crashControlRow {
+        gap: 7px;
+    }
+
+    .startCrashButton {
+        min-width: 135px;
+        padding: 12px 10px;
+        font-size: 16px;
+    }
+
+    #crashBetInput {
+        font-size: 18px;
+    }
+}
+.startCrashButton:disabled {
+    opacity: 0.65;
+    cursor: default;
+    transform: none;
+}
+
+.startCrashButton:disabled:hover {
+    transform: none;
+    background: #59647e;
+}
+/* 保管所のスクロールバー幅を常に確保する */
+#storageScreen {
+    scrollbar-gutter: stable;
+}
+
+/* 保管所ヘッダーの位置を固定 */
+#storageScreen .panelHeader {
+    width: min(900px, 100%);
+    flex-shrink: 0;
+}
+
+/* トロフィー商品：アイコンを大きく表示 */
+.trophyStoreVisual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 140px;
+    margin-bottom: 8px;
+    font-size: 96px;
+    line-height: 1;
+}
+
+@media (max-width: 600px) {
+    .trophyStoreVisual {
+        min-height: 110px;
+        font-size: 76px;
+    }
+}
+/* =========================
+   実績メニューボタン
+========================= */
+
+.achievementMenuButton {
+    width: min(520px, 100%);
+
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    padding: 16px 20px;
+
+    border: 2px solid rgba(255, 215, 80, 0.55);
+    border-radius: 14px;
+
+    color: white;
+    background: rgba(41, 54, 91, 0.95);
+
+    cursor: pointer;
+}
+
+.achievementMenuIcon {
+    flex-shrink: 0;
+    font-size: 38px;
+}
+
+.achievementMenuText {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.achievementMenuText strong {
+    font-size: 20px;
+}
+
+.achievementMenuText small {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 14px;
+}
+
+.achievementMenuArrow {
+    font-size: 36px;
+}
+
+/* =========================
+   実績一覧
+========================= */
+
+#achievementList {
+    width: min(900px, 100%);
+
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.achievementCard {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    padding: 18px 20px;
+
+    border-radius: 16px;
+    background: rgba(45, 53, 84, 0.94);
+}
+
+.achievementCard.locked {
+    opacity: 0.55;
+    filter: grayscale(0.8);
+}
+
+.achievementCard.unlocked {
+    border: 2px solid rgba(255, 215, 75, 0.65);
+}
+
+.achievementIcon {
+    width: 60px;
+    flex-shrink: 0;
+
+    font-size: 42px;
+    text-align: center;
+}
+
+.achievementContent {
+    flex: 1;
+}
+
+.achievementContent h2 {
+    margin-bottom: 5px;
+    font-size: 21px;
+}
+
+.achievementContent p {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.achievementState {
+    flex-shrink: 0;
+
+    padding: 7px 12px;
+    border-radius: 999px;
+
+    background: rgba(0, 0, 0, 0.22);
+
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* =========================
+   実績解除通知
+   画面右上に固定
+========================= */
+
+.achievementUnlockPopup {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 999999;
+
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    width: min(340px, calc(100vw - 32px));
+    padding: 15px 20px;
+
+    border: 2px solid #ffe068;
+    border-radius: 15px;
+
+    color: white;
+    background: rgba(38, 47, 78, 0.97);
+
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.4);
+
+    pointer-events: none;
+
+    animation:
+        achievementPopupRight
+        3.5s ease forwards;
+}
+
+.achievementUnlockIcon {
+    flex-shrink: 0;
+    font-size: 38px;
+}
+
+.achievementUnlockContent {
+    min-width: 0;
+}
+
+.achievementUnlockPopup small,
+.achievementUnlockPopup strong {
+    display: block;
+}
+
+.achievementUnlockPopup small {
+    margin-bottom: 3px;
+
+    color: #ffe068;
+
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.achievementUnlockPopup strong {
+    overflow: hidden;
+
+    font-size: 19px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+@keyframes achievementPopupRight {
+    0% {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+
+    12%,
+    82% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+}
+
+@media (max-width: 600px) {
+    .achievementUnlockPopup {
+        top: 14px;
+        right: 14px;
+
+        width: calc(100vw - 28px);
+        padding: 13px 16px;
+    }
+}
+/* =========================
+   魚卵
+========================= */
+.eggStorageCard {
+    border: none;
+    background: linear-gradient(
+        180deg,
+        rgba(80, 64, 90, 0.96),
+        rgba(42, 50, 78, 0.96)
+    );
+}
+
+.eggRarity {
+    color: #ffe3a1;
+    background: rgba(150, 95, 45, 0.45);
+}
+
+.eggTimer {
+    min-height: 24px;
+    color: #ffe192;
+    font-weight: bold;
+}
+
+.storageHatchButton {
+    animation: eggHatchReady 1.4s ease-in-out infinite;
+}
+
+@keyframes eggHatchReady {
+    0%, 100% {
+        box-shadow: 0 0 5px rgba(255, 220, 90, 0.35);
+    }
+    50% {
+        box-shadow: 0 0 18px rgba(255, 220, 90, 0.9);
+    }
+}
+
+
+/* =========================
+   魚卵カードの位置固定
+========================= */
+.eggStorageCard {
+    display: flex;
+    flex-direction: column;
+    min-height: 285px;
+}
+
+.storageCardImageSlot {
+    width: 100%;
+    height: 125px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+}
+
+.storageCardImageSlot img {
+    width: 100%;
+    height: 125px;
+    object-fit: contain;
+}
+
+/* 魚カードのレアリティ表示ぶんの高さを残す */
+.storageRaritySpacer {
+    height: 20px;
+    flex: 0 0 20px;
+}
+
+.eggStorageCard h2 {
+    margin-top: 10px;
+}
+
+.eggStorageCard .storageSellButton {
+    width: 100%;
+    min-height: 39px;
+    margin-top: auto;
+    box-sizing: border-box;
+}
+
+.storageHatchButton {
+    padding: 9px 20px;
+}
+
+/* 魚卵がその場で魚へ変わる孵化演出 */
+.eggHatching .storageEggImage {
+    animation: eggZoomBeforeHatch 0.52s ease-in forwards;
+}
+
+.eggHatching.eggRevealed .storageEggImage {
+    animation: fishZoomAfterHatch 0.85s cubic-bezier(.2,.85,.25,1) forwards;
+}
+
+@keyframes eggZoomBeforeHatch {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+        filter: brightness(1);
+    }
+    75% {
+        transform: scale(1.65);
+        opacity: 1;
+        filter: brightness(1.8);
+    }
+    100% {
+        transform: scale(2.05);
+        opacity: 0;
+        filter: brightness(2.4);
+    }
+}
+
+@keyframes fishZoomAfterHatch {
+    0% {
+        transform: scale(2.05);
+        opacity: 0;
+        filter: brightness(2.2);
+    }
+    45% {
+        transform: scale(1.4);
+        opacity: 1;
+        filter: brightness(1.35);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+        filter: brightness(1);
+    }
+}
+
+/* スーパー魚卵 */
+.storeUtilityGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    margin-top: 18px;
+}
+
+/* スーパー魚卵のストアカードだけ枠線を表示しない */
+.superEggStoreCard {
+    border: none;
+}
+
+
+.superEggStorageCard {
+    border-color: rgba(255, 225, 90, 0.88);
+    box-shadow: inset 0 0 18px rgba(255, 210, 60, 0.12);
+}
+
+
+/* =========================
+   魚卵・ストア 最終調整
+   既存の魚カード内の表示には触れません
+========================= */
+
+/* カード数に関係なく、保管所カードの横幅を一定にする。
+   210pxは従来の4列表示時とほぼ同じ幅です。 */
+#storageList {
+    grid-template-columns: repeat(auto-fill, 210px);
+    justify-content: center;
+    align-items: start;
+}
+
+/* 魚卵カードは魚カードと同じ通常フローで組み立てる */
+.eggStorageCard {
+    display: block;
+    min-height: 0;
+    box-sizing: border-box;
+}
+
+.storageCardImageSlot {
+    width: 100%;
+    height: 125px;
+}
+
+.storageCardImageSlot img {
+    width: 100%;
+    height: 125px;
+    object-fit: contain;
+}
+
+/* 魚のレアリティ欄と同じ高さだけ確保する */
+.storageRaritySpacer {
+    display: block;
+    height: 27px;
+    min-height: 27px;
+}
+
+/* 魚卵だけに付いていたボタン幅・位置の上書きを解除し、
+   魚カードの売却ボタンと完全に同じ指定を使う */
+.eggStorageCard .storageSellButton,
+.eggStorageCard .storageHatchButton {
+    width: auto;
+    min-height: 0;
+    margin-top: 12px;
+    padding: 9px 20px;
+    box-sizing: content-box;
+}
+
+/* 保管所拡張とスーパー魚卵を横並びにする */
+.storeUtilityGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* スーパー魚卵カードの枠線を削除 */
+.superEggStoreCard {
+    border: none;
+}
+
+@media (max-width: 800px) {
+    /* 既存の全storeGridを1列にする指定より優先し、
+       この2カードだけは横並びを維持する */
+    .storeUtilityGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 520px) {
+    /* 極端に狭い画面では文字つぶれ防止のため1列 */
+    .storeUtilityGrid {
+        grid-template-columns: 1fr;
+    }
+
+    #storageList {
+        grid-template-columns: minmax(180px, 210px);
+    }
+}
+
+
+/* =========================================================
+   魚卵カード最終整合修正
+   魚カード本体には変更を加えず、魚卵側を同じ構造に合わせる
+========================================================= */
+
+/* 実際の border は外寸を4px増やすため使わない。
+   同じ見た目の線は inset の影で描画する。 */
+.eggStorageCard {
+    border: none;
+    box-shadow: inset 0 0 0 2px rgba(255, 190, 100, 0.78);
+}
+
+.superEggStorageCard {
+    border: none;
+    box-shadow:
+        inset 0 0 0 2px rgba(255, 225, 90, 0.88),
+        inset 0 0 18px rgba(255, 210, 60, 0.12);
+}
+
+/* 魚カードと同じ img / rarity / h2 / p / p / button の並びにしたため、
+   魚卵専用の高さ調整を解除する。 */
+.eggStorageCard .storageEggImage {
+    width: 100%;
+    height: 125px;
+    object-fit: contain;
+}
+
+.eggRarityPlaceholder {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.eggStorageCard .eggTimer {
+    min-height: 0;
+    color: #ffe192;
+    font-weight: bold;
+}
+
+.eggStorageCard .storageSellButton,
+.eggStorageCard .storageHatchButton {
+    width: auto;
+    min-height: 0;
+    margin-top: 12px;
+    padding: 9px 20px;
+    box-sizing: content-box;
+}
+
+/* スーパー魚卵のストアカードも、他の商品と全く同じ枠線にする。 */
+.superEggStoreCard {
+    border: 2px solid rgba(255, 255, 255, 0.14);
+}
+
+
+/* =========================
+   魚名の1行固定・自動縮小用
+========================= */
+
+/*
+ * JavaScriptが文字サイズだけを調整します。
+ * 名前欄の高さは固定されるため、
+ * 長い名前でもカード全体の高さは変わりません。
+ */
+.autoFitFishName {
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: clip;
+    text-align: center;
+}
+
+/* 釣果画面 */
+#resultFish .fishName {
+    min-height: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    line-height: 1;
+}
+
+/* 図鑑 */
+.encyclopediaCard .encyclopediaFishName {
+    min-height: 28px;
+    height: 28px;
+    margin: 10px 0 6px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    line-height: 1;
+}
+
+/* 保管所 */
+#storageList .storageFishName {
+    min-height: 28px;
+    height: 28px;
+    margin: 10px 0 6px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    line-height: 1;
+}
+
+
+/* =========================================================
+   保管所グリッド最終指定
+   PC：4列 / スマートフォン：2列
+========================================================= */
+
+#storageList {
+    width: min(900px, 100%);
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    justify-content: stretch;
+    align-items: start;
+}
+
+@media (max-width: 700px) {
+    #storageList {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 12px;
+    }
+}
+
+
+/* =========================================================
+   オートマ採掘
+   撒き餌カードと同じ横幅
+========================================================= */
+
+.autoMiningStoreGrid {
+    width: min(900px, 100%);
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+.autoMiningStoreCard {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* お金獲得ポップアップ */
+.moneyDisplay {
+    position: relative;
+    overflow: visible;
+}
+
+.moneyGainPopup {
+    position: absolute;
+    left: 50%;
+    top: 55%;
+    bottom: auto;
+    z-index: 1000;
+
+    color: #ffe27a;
+    font-size: 17px;
+    font-weight: 900;
+    line-height: 1;
+    white-space: nowrap;
+
+    text-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.65);
+
+    pointer-events: none;
+
+    animation:
+        moneyGainFloat
+        1.15s ease-out forwards;
+}
+
+@keyframes moneyGainFloat {
+    0% {
+        opacity: 0;
+        transform:
+            translate(
+                calc(-50% + var(--money-popup-x)),
+                4px
+            )
+            scale(0.9);
+    }
+
+    18% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform:
+            translate(
+                calc(-50% + var(--money-popup-x)),
+                -30px
+            )
+            scale(1.04);
+    }
+}
